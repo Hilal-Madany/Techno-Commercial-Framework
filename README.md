@@ -10,8 +10,8 @@ Welcome to my professional repository. I am a **Mechanical Engineer (B.Tech)** a
 ## 🛠️ I. Technical Operations & O&M
 *Expertise in Building, Plant, and Healthcare Mechanical Systems.*
 
-* **PPM & Lifecycle Management:** 14 years of field-tested SOPs for HVAC (AHU/Chillers/VRF), Firefighting, Electrical (DG/UPS), and Water Treatment.
-* **Healthcare Mechanical Specialist:** Expertise in Medical Gas Pipeline Systems (MGPS), Pressure Gradient Control for OTs/ICUs, and N+1 Redundancy.
+* **PPM & Lifecycle Management:** 14 years of field-tested SOPs for HVAC (AHU/VRF), Combustion System, Filtration, Lubrication, Pipeline Gas System for building/plants and Water Treatment.
+* **Healthcare Mechanical Specialist:** Expertise in Medical Gas Pipeline Systems (MGPS), Pressure Gradient Control for OTs/ICUs.
 * **Engineering Blogs:** I regularly share deep-dives into mechanical systems through my [Engineering Concepts Newsletter](https://www.linkedin.com/newsletters/engineering-concepts-6890010523396882432/).
 
 ---
