@@ -10,6 +10,6 @@ This folder contains standardized operating procedures for high-performance mech
 
 
 ### 🏢 Facility O&M & Healthcare
-* **HVAC/Chillers:** Optimization of KW/TR and descaling protocols.
+* **HVAC/VRF/Chillers/AHU:** Optimization of KW/TR and descaling protocols.
 * **Healthcare (MGPS):** Critical Medical Gas Pipeline maintenance and OT pressure gradients.
-* **Heating Solutions:** Selection of Industrial Heaters and Heat Exchangers.
+* **Heating Solutions:** Selection of Industrial PNG,LPG, Boilers, Heaters and Heat Exchangers.
