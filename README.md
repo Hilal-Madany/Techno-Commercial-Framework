@@ -19,7 +19,7 @@ Based in Fatehpur, India, I bridge the gap between heavy mechanical engineering 
 | **🔥 Combustion** | **Wesman & Fives Stein Systems** | IS 1448 / ASME CSD-1 | Wesman, Fives Stein, Forbes Marshall |
 | **🛢️ Lubrication** | **Nortek & Shaanlube CLS** | ISO VG / DIN 51524 | Nortek, Shaanlube, SKF/Lincoln |
 | **🌬️ Filtration** | **Pall & Duplex Straining** | ISO 16890 / ISO 4406 | Pall, Hydac, Parker, Filpro |
-| **❄️ HVAC** | **Ind/Comm & Medical (OT/ER)** | ASHRAE 170 / SMACNA | Trane, Carrier, Blue Star, Zeco |
+| **❄️ HVAC/MGPS** | **Ind/Comm & Medical (OT/ER)** | ASHRAE 170 / SMACNA | Trane, Carrier, Blue Star, Zeco |
 
 
 
