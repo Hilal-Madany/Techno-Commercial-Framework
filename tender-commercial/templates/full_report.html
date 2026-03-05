@@ -2,102 +2,106 @@
 <html>
 <head>
     <style>
-        body { font-family: 'Times New Roman', serif; margin: 0; padding: 0; color: #333; }
-        .page { width: 210mm; min-height: 297mm; padding: 25mm; margin: 10mm auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        body { font-family: 'Times New Roman', serif; margin: 0; padding: 0; color: #333; background-color: #f4f4f4; }
+        .page { width: 210mm; min-height: 297mm; padding: 25mm; margin: 20px auto; background: white; box-shadow: 0 0 10px rgba(0,0,0,0.1); box-sizing: border-box; }
         .page-break { page-break-after: always; }
         
-        .header { border-bottom: 3px solid #003366; padding-bottom: 10px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; }
-        .company-name { font-size: 24px; font-weight: bold; color: #003366; }
+        .header-tbl { width: 100%; border: 2px solid #000; margin-bottom: 20px; }
+        .header-tbl td { padding: 10px; border: 1px solid #000; text-align: center; font-weight: bold; }
         
-        .section-title { background: #f2f2f2; border-left: 5px solid #003366; padding: 10px; font-weight: bold; font-size: 16px; margin: 25px 0 15px 0; }
+        .section-title { background: #003366; color: white; padding: 10px; font-weight: bold; margin-top: 20px; text-transform: uppercase; border-left: 5px solid #ffcc00; }
         
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 14px; }
-        th { background-color: #f9f9f9; width: 35%; color: #555; }
-        
-        .score-box { background: #003366; color: white; padding: 20px; text-align: center; margin-top: 40px; border-radius: 8px; }
-        
+        table.data-table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        table.data-table th, table.data-table td { border: 1px solid #ccc; padding: 12px; text-align: left; }
+        th { background-color: #f9f9f9; width: 40%; font-size: 14px; color: #444; }
+        td { font-size: 14px; }
+
+        .score-banner { border: 2px dashed #003366; padding: 20px; text-align: center; margin-top: 40px; }
+        .score-val { font-size: 36px; font-weight: bold; color: #003366; }
+
         @media print {
-            .no-print { display: none; }
-            .page { box-shadow: none; margin: 0; width: 100%; }
+            .no-print { display: none !important; }
+            .page { margin: 0; border: none; box-shadow: none; width: 100%; }
             body { background: white; }
         }
-        
-        .print-btn { background: #d9534f; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
-    <div class="no-print" style="text-align: center; padding: 20px; background: #eee; position: sticky; top: 0;">
-        <button class="print-btn" onclick="window.print()">📥 PRINT FULL TENDER REPORT (PDF)</button>
+    <div class="no-print" style="position: sticky; top: 0; background: #333; padding: 15px; text-align: center;">
+        <button onclick="window.print()" style="padding: 10px 30px; background: #ffcc00; border: none; font-weight: bold; cursor: pointer; border-radius: 5px;">🖨️ PRINT OFFICIAL REPORT</button>
     </div>
 
     <div class="page">
-        <div class="header">
-            <div class="company-name">ACCUMEN TECHNO</div>
-            <div style="text-align: right;">REPORT DATE: {{ date }}</div>
-        </div>
-        
-        <h2 style="text-align: center; text-decoration: underline;">VENDOR ASSESSMENT REPORT</h2>
-        
-        <div class="section-title">1. COMPANY GENERAL IDENTIFICATION</div>
-        <table>
-            <tr><th>Full Name of Company</th><td>{{ d.name }}</td></tr>
-            <tr><th>Registered Office Address</th><td>{{ d.reg_office }}</td></tr>
-            <tr><th>Factory / Works Address</th><td>{{ d.works_addr }}</td></tr>
-            <tr><th>Telephone / Mobile</th><td>{{ d.tel }}</td></tr>
-            <tr><th>Email for Communication</th><td>{{ d.email }}</td></tr>
+        <table class="header-tbl">
+            <tr>
+                <td rowspan="2" width="20%"><img src="https://via.placeholder.com/80" alt="Logo"></td>
+                <td width="60%">VENDOR / SUB-VENDOR ASSESSMENT REPORT</td>
+                <td width="20%">REV: 02</td>
+            </tr>
+            <tr>
+                <td>ACCUMEN TECHNO MARKETING SOLUTION</td>
+                <td>DATE: {{ date }}</td>
+            </tr>
         </table>
 
-        <div class="section-title">2. STATUTORY REGISTRATIONS</div>
-        <table>
-            <tr><th>Income Tax PAN</th><td>{{ d.pan }}</td></tr>
-            <tr><th>GST Registration</th><td>{{ d.gst }}</td></tr>
-            <tr><th>MSME No. & Category</th><td>{{ d.msme_no }} ({{ d.msme_type }})</td></tr>
+        <div class="section-title">1.0 Corporate Identification</div>
+        <table class="data-table">
+            <tr><th>Legal Entity Name</th><td>{{ d.name }}</td></tr>
+            <tr><th>Registered Office</th><td>{{ d.reg_office }}</td></tr>
+            <tr><th>Manufacturing/Works Unit</th><td>{{ d.works_addr }}</td></tr>
+            <tr><th>Email Address</th><td>{{ d.email }}</td></tr>
+            <tr><th>Establishment Experience</th><td>{{ d.commence_year }} Years</td></tr>
+        </table>
+
+        <div class="section-title">2.0 Statutory Registrations</div>
+        <table class="data-table">
+            <tr><th>GSTIN Number</th><td>{{ d.gst }}</td></tr>
+            <tr><th>Permanent Account Number (PAN)</th><td>{{ d.pan }}</td></tr>
+            <tr><th>MSME/Udyam Registration</th><td>{{ d.msme_no }}</td></tr>
         </table>
         <div class="page-break"></div>
     </div>
 
     <div class="page">
-        <div class="section-title">3. TECHNICAL & MANUFACTURING PROFILE</div>
-        <table>
-            <tr><th>Nature of Business</th><td>{{ d.is_dealer }}</td></tr>
-            <tr><th>Sought Categories</th><td>{{ d.prod_category | join(', ') }}</td></tr>
-            <tr><th>Description of Services</th><td>{{ d.main_products }}</td></tr>
-            <tr><th>Key Infrastructure/Machinery</th><td>{{ d.machinery }}</td></tr>
-            <tr><th>Covered Area / Power</th><td>{{ d.area }} Sq.m / {{ d.power }} kVA</td></tr>
+        <div class="section-title">3.0 Technical Capability & Assets</div>
+        <table class="data-table">
+            <tr><th>Service Categories</th><td>{{ d.prod_category | join(', ') }}</td></tr>
+            <tr><th>Infrastructure Area</th><td>{{ d.area }} Sq. meters</td></tr>
+            <tr><th>Power Load Capacity</th><td>{{ d.power }} kVA</td></tr>
+            <tr><th>Machinery & Equipment</th><td>{{ d.machinery }}</td></tr>
         </table>
 
-        <div class="section-title">4. MANPOWER CAPACITY</div>
-        <table>
-            <tr><th>Graduate Engineers</th><td>{{ d.grad_staff }}</td></tr>
-            <tr><th>Skilled Workforce</th><td>{{ d.skilled_workers }}</td></tr>
+        <div class="section-title">4.0 Human Resource Strength</div>
+        <table class="data-table">
+            <tr><th>Engineering Graduates</th><td>{{ d.grad_staff }}</td></tr>
+            <tr><th>Total Skilled Workforce</th><td>{{ d.skilled_workers }}</td></tr>
         </table>
-        <div class="page-break"></div>
-    </div>
 
-    <div class="page">
-        <div class="section-title">5. PAST PERFORMANCE & REFERENCES</div>
-        <table>
+        <div class="section-title">5.0 Performance & Experience</div>
+        <table class="data-table">
+            <tr><th>Government/PSU Exposure</th><td>{{ d.govt_exp }}</td></tr>
             <tr><th>Major Client Reference</th><td>{{ d.ref_1 }}</td></tr>
-            <tr><th>Previous PSU/Govt. Experience</th><td>{{ d.govt_exp }}</td></tr>
+        </table>
+        <div class="page-break"></div>
+    </div>
+
+    <div class="page">
+        <div class="section-title">6.0 Quality & Financial Soundness</div>
+        <table class="data-table">
+            <tr><th>ISO 9001 Compliance</th><td>{{ d.iso9001 }}</td></tr>
+            <tr><th>Annual Turnover (Latest)</th><td>INR {{ d.turnover_3 }} Cr</td></tr>
+            <tr><th>Estimated Net Worth</th><td>INR {{ d.networth }} Cr</td></tr>
         </table>
 
-        <div class="section-title">6. QUALITY & FINANCIALS</div>
-        <table>
-            <tr><th>ISO 9001:2015 Certification</th><td>{{ d.iso9001 }}</td></tr>
-            <tr><th>Testing Facilities</th><td>{{ d.inhouse_test }}</td></tr>
-            <tr><th>Net Worth</th><td>{{ d.networth }} Cr</td></tr>
-            <tr><th>Annual Turnover (FY 25)</th><td>{{ d.turnover_3 }} Cr</td></tr>
-        </table>
-
-        <div class="score-box">
-            <div style="font-size: 14px; opacity: 0.8;">OFFICIAL COMPLIANCE SCORE</div>
-            <div style="font-size: 32px;">{{ d.score }} / 100</div>
+        <div class="score-banner">
+            <div style="font-weight: bold;">TOTAL ASSESSMENT RATING</div>
+            <div class="score-val">{{ d.score }} / 100</div>
+            <p><strong>Note:</strong> 60% is minimum qualification for Sub-vendor registration.</p>
         </div>
 
-        <div style="margin-top: 60px; display: flex; justify-content: space-between;">
-            <div style="width: 200px; text-align: center; border-top: 1px solid #000;">Prepared by System</div>
-            <div style="width: 200px; text-align: center; border-top: 1px solid #000;">Authorized Seal</div>
+        <div style="margin-top: 100px; display: flex; justify-content: space-between;">
+            <div style="width: 200px; border-top: 1px solid #000; text-align: center;">Verified (Digital Signature)</div>
+            <div style="width: 200px; border-top: 1px solid #000; text-align: center;">Proprietor/Director Seal</div>
         </div>
     </div>
 </body>
