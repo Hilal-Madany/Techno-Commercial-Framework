@@ -3,100 +3,84 @@ import pdfkit
 from jinja2 import Environment, FileSystemLoader
 import datetime
 
-# --- CONFIGURATION ---
-st.set_page_config(page_title="National Vendor Assessment Portal", layout="wide")
+# --- SYSTEM CONFIG ---
+st.set_page_config(page_title="Vendor Assessment Portal", layout="wide")
 
-# --- UI STYLING ---
-st.markdown("""
-    <style>
-    .main { background-color: #f8f9fa; }
-    .stButton>button { width: 100%; background-color: #003366; color: white; }
-    .section-box { padding: 20px; border-radius: 10px; border: 1px solid #dee2e6; margin-bottom: 20px; background: white; }
-    </style>
-    """, unsafe_allow_html=True)
-
-st.title("🏛️ National Vendor Assessment System")
-st.info("Authorized Standard Format for PSU, Railways, and Govt. Departments")
-
-# --- SIDEBAR NAVIGATION ---
-menu = ["1. General Info", "2. Technical & Manufacturing", "3. Quality System", "4. Financial Soundness", "5. Final Review & PDF"]
-choice = st.sidebar.radio("Assessment Sections", menu)
-
-# Initialize Session State to store data across tabs
+# Initialize Session State for saving data and tracking segments
+if 'segment' not in st.session_state:
+    st.session_state.segment = 1
 if 'form_data' not in st.session_state:
     st.session_state.form_data = {}
 
-# --- SECTION 1: GENERAL INFO ---
-if choice == "1. General Info":
+# --- SEGMENT NAVIGATION ---
+def save_and_forward():
+    st.session_state.segment += 1
+
+def go_back():
+    st.session_state.segment -= 1
+
+st.title("🏛️ Official Vendor Assessment & Registration")
+st.write(f"**Segment {st.session_state.segment} of 4**")
+st.progress(st.session_state.segment / 4)
+
+# --- SEGMENT 1: GENERAL & SAVING ---
+if st.session_state.segment == 1:
+    st.subheader("General Identification")
     with st.container():
-        st.header("General & Statutory Identification")
-        col1, col2 = st.columns(2)
-        with col1:
-            st.session_state.form_data['comp_name'] = st.text_input("Name of Supplier in Full")
-            st.session_state.form_data['reg_office'] = st.text_area("Registered Office Address")
-            st.session_state.form_data['pan'] = st.text_input("PAN / TAN Number")
-        with col2:
-            st.session_state.form_data['factory_addr'] = st.text_area("Factory / Works Address")
-            st.session_state.form_data['gst'] = st.text_input("GST / TIN Number")
-            st.session_state.form_data['msme'] = st.text_input("MSME Registration No.")
+        st.session_state.form_data['comp_name'] = st.text_input("Full Name of Company", st.session_state.form_data.get('comp_name', ''))
+        st.session_state.form_data['pan'] = st.text_input("Income Tax PAN", st.session_state.form_data.get('pan', ''))
+        st.button("Save & Forward ➡️", on_click=save_and_forward)
 
-# --- SECTION 2: TECHNICAL ---
-elif choice == "2. Technical & Manufacturing":
-    st.header("Manufacturing & Process Capability")
+# --- SEGMENT 2: TECHNICAL ---
+elif st.session_state.segment == 2:
+    st.subheader("Technical & Manufacturing")
+    st.session_state.form_data['testing'] = st.radio("In-house Testing available?", ["Yes", "No"], 
+        index=0 if st.session_state.form_data.get('testing') == "Yes" else 1)
+    st.session_state.form_data['iso'] = st.selectbox("ISO 9001:2015 Certified?", ["Yes", "No"],
+        index=0 if st.session_state.form_data.get('iso') == "Yes" else 1)
+    
     col1, col2 = st.columns(2)
-    with col1:
-        st.session_state.form_data['nature'] = st.multiselect("Nature of Business", ["Manufacturing", "EPC", "Dealer", "Service Provider"])
-        st.session_state.form_data['area'] = st.number_input("Total Covered Area (Sq. m.)", min_value=0)
-    with col2:
-        st.session_state.form_data['testing_inhouse'] = st.radio("In-house Testing Facility available?", ["Yes", "No"])
-        st.session_state.form_data['power_load'] = st.text_input("Electric Power Connected Load (kVA)")
+    col1.button("⬅️ Back", on_click=go_back)
+    col2.button("Save & Forward ➡️", on_click=save_and_forward)
 
-# --- SECTION 3: QUALITY ---
-elif choice == "3. Quality System":
-    st.header("Quality Control & Compliance")
-    q1, q2 = st.columns(2)
-    with q1:
-        st.session_state.form_data['iso_9001'] = st.selectbox("Is company ISO 9001 Certified?", ["Yes", "No"])
-        st.session_state.form_data['iso_14001'] = st.selectbox("Is company ISO 14001 Certified?", ["Yes", "No"])
-    with q2:
-        st.session_state.form_data['q_manual'] = st.selectbox("Written Quality Manual available?", ["Yes", "No"])
-        st.session_state.form_data['traceability'] = st.selectbox("System for Identification & Traceability?", ["Yes", "No"])
+# --- SEGMENT 3: FINANCIAL ---
+elif st.session_state.segment == 3:
+    st.subheader("Financial Soundness")
+    st.session_state.form_data['turnover'] = st.number_input("Last Year Turnover (in Cr)", value=st.session_state.form_data.get('turnover', 0.0))
+    
+    col1, col2 = st.columns(2)
+    col1.button("⬅️ Back", on_click=go_back)
+    col2.button("Save & Forward ➡️", on_click=save_and_forward)
 
-# --- SECTION 4: FINANCIAL ---
-elif choice == "4. Financial Soundness":
-    st.header("Financial Data (Last 3 Years)")
-    f1, f2, f3 = st.columns(3)
-    with f1: st.session_state.form_data['turnover_1'] = st.number_input("Turnover Year 1 (in Cr)", format="%.2f")
-    with f2: st.session_state.form_data['turnover_2'] = st.number_input("Turnover Year 2 (in Cr)", format="%.2f")
-    with f3: st.session_state.form_data['turnover_3'] = st.number_input("Turnover Year 3 (in Cr)", format="%.2f")
-
-# --- SECTION 5: FINAL REVIEW & PDF ---
-elif choice == "5. Final Review & PDF":
-    st.header("Final Submission & Scoring")
+# --- SEGMENT 4: REVIEW & PRINT REPORT ---
+elif st.session_state.segment == 4:
+    st.subheader("Complete Report Summary")
+    st.info("Please review the details below. Once confirmed, click 'Generate Report' to print/download.")
     
-    # Calculate Score
-    score = 0
-    if st.session_state.form_data.get('iso_9001') == "Yes": score += 25
-    if st.session_state.form_data.get('testing_inhouse') == "Yes": score += 25
-    if st.session_state.form_data.get('q_manual') == "Yes": score += 25
-    if st.session_state.form_data.get('turnover_3', 0) > 0: score += 25
+    # Show summary table
+    st.table(st.session_state.form_data)
     
-    st.metric("Total Compliance Score", f"{score}%")
+    col1, col2 = st.columns(2)
+    col1.button("⬅️ Edit Details", on_click=go_back)
     
-    if st.button("Generate & Download Official PDF Report"):
-        # Compile final data for jinja template
-        final_data = st.session_state.form_data
-        final_data['score'] = score
-        final_data['date'] = datetime.date.today().strftime("%d/%m/%Y")
+    if col2.button("📝 Generate & Print Final Report"):
+        # Compile Report Data
+        st.session_state.form_data['date'] = datetime.date.today().strftime("%d/%m/%Y")
         
-        # HTML Template Render (Assuming template exists in /templates)
+        # Logic for PDF Generation
         try:
             env = Environment(loader=FileSystemLoader('templates'))
             template = env.get_template('full_report.html')
-            html_content = template.render(d=final_data)
+            html_out = template.render(d=st.session_state.form_data)
             
-            # PDF Generation
-            pdf = pdfkit.from_string(html_content, False)
-            st.download_button("Download Final Report", data=pdf, file_name="Vendor_Assessment_Final.pdf", mime="application/pdf")
+            # This generates the PDF for the user to download/print
+            pdf = pdfkit.from_string(html_out, False)
+            st.download_button(
+                label="📥 Download & Print Assessment",
+                data=pdf,
+                file_name=f"Report_{st.session_state.form_data['comp_name']}.pdf",
+                mime="application/pdf"
+            )
+            st.success("Report Generated Successfully! You can now print the downloaded PDF.")
         except Exception as e:
-            st.error(f"Error: Ensure 'templates/full_report.html' exists in GitHub. {e}")
+            st.error(f"Configuration Error: {e}")
